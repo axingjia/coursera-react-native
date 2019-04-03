@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, FlatList,Text } from 'react-native';
 import { Card } from 'react-native-elements';
+import * as Animatable from 'react-native-animatable';
 
 export default class Contact extends Component{
 	constructor(props){
@@ -18,6 +19,7 @@ Email:confusion@food.net`;
 			return(<Text key={index}>{currentValue}</Text>)
 		});
 		return(
+			<Animatable.View animation="fadeInDown" duration={2000} delay={1000}>   
 			<Card
 				featuredTitle={"Contact Info"}
 				
@@ -27,6 +29,7 @@ Email:confusion@food.net`;
 				{textchunk}
 			
 			</Card>
+			</Animatable.View>
 		)
 	}
 }

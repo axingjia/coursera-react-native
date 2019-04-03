@@ -21,6 +21,25 @@ export const fetchComments = () => (dispatch) => {
     .catch(error => dispatch(commentsFailed(error.message)));
 };
 
+export const postComment = (dishId, rating, author,comment)  => (dispatch) => {
+    const newComment = {
+        dishId: dishId,
+        rating: rating,
+        author: author,
+        comment: comment
+    };
+    newComment.date = new Date().toISOString();
+    setTimeout(() => {
+        dispatch(addComment(newComment));
+    }, 2000);
+};
+
+
+export const addComment = (newComment) => ({
+    type: ActionTypes.ADD_COMMENT,
+    payload: newComment
+});
+
 export const commentsFailed = (errmess) => ({
     type: ActionTypes.COMMENTS_FAILED,
     payload: errmess
@@ -154,3 +173,8 @@ export const addFavorite = (dishId) => ({
     type: ActionTypes.ADD_FAVORITE,
     payload: dishId
 });
+
+export const deleteFavorite = (dishId) => ({
+    type: ActionTypes.DELETE_FAVORITE,
+    payload: dishId
+});  
