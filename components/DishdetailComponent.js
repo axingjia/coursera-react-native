@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, FlatList ,StyleSheet,Modal,Button,Alert, PanResponder} from 'react-native';
+import { Text, View, ScrollView, FlatList ,StyleSheet,Modal,Button,Alert, PanResponder,Share} from 'react-native';
 import { DISHES } from '../shared/dishes';
 import { COMMENTS } from '../shared/comments';
 import { Card, Icon,Rating, Input} from 'react-native-elements';
@@ -45,12 +45,28 @@ class RenderDish extends Component{
         this.props.postComment(dishId, rating, author, comment);
     }
     render(){
+        const shareDish = (title, message, url) => {
+            Share.share({
+                title: title,
+                message: title + ': ' + message + ' ' + url,
+                url: url
+            },{
+                dialogTitle: 'Share ' + title
+            })
+        }
         
         
 
         const dish = this.props.dish;
         const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
             if ( dx < -200 )
+                return true;
+            else
+                return false;
+        }
+        
+        const recognizeComment = ({ moveX, moveY, dx, dy }) => {
+            if ( dx > 200 )
                 return true;
             else
                 return false;
@@ -73,6 +89,9 @@ class RenderDish extends Component{
                         ],
                         { cancelable: false }
                     );
+                if(recognizeComment(gestureState)){
+                    this.toggleCommentFormModal();
+                }
 
                 return true;
             }
@@ -105,6 +124,14 @@ class RenderDish extends Component{
                             color='#f50'
                             onPress={() => {this.toggleCommentFormModal()}}
                             />
+                        <Icon
+                            raised
+                            reverse
+                            name='share'
+                            type='font-awesome'
+                            color='#51D2A8'
+                            style={styles.cardItem}
+                            onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)} />
                     </View>
                     <Modal animationType = {"slide"} transparent = {false}
                         visible = {this.state.commentFormModal}
